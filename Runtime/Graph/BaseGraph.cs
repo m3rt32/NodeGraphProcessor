@@ -27,6 +27,7 @@ namespace GraphProcessor
 
 		[System.NonSerialized]
 		public List< BaseNode >							nodes = new List< BaseNode >();
+
 		[System.NonSerialized]
 		public Dictionary< string, BaseNode >			nodesPerGUID = new Dictionary< string, BaseNode >();
 
@@ -80,9 +81,9 @@ namespace GraphProcessor
 			nodes.Remove(node);
 		}
 
-		public SerializableEdge Connect(BaseNode inputNode, string inputFieldName, BaseNode outputNode, string outputFieldName)
+		public SerializableEdge Connect(NodePort inputPort, NodePort outputPort)
 		{
-			var edge = SerializableEdge.CreateNewEdge(this, inputNode, inputFieldName, outputNode, outputFieldName);
+			var edge = SerializableEdge.CreateNewEdge(this, inputPort, outputPort);
 
 			edges.Add(edge);
 
@@ -140,7 +141,7 @@ namespace GraphProcessor
 			serializedNodes.Clear();
 
 			foreach (var node in nodes)
-				serializedNodes.Add(JsonSerializer.Serialize(node));
+				serializedNodes.Add(JsonSerializer.SerializeNode(node));
 		}
 
 		// We can deserialize data here because it's called in a unity context
